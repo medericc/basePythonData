@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation NumPy, Pandas et Matplotlib</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Documentation Rapide : NumPy, Pandas et Matplotlib</h1>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#numpy">NumPy</a></li>
+            <li><a href="#pandas">Pandas</a></li>
+            <li><a href="#matplotlib">Matplotlib</a></li>
+        </ul>
+    </nav>
+
+    <section id="content">
+        <!-- NumPy Section -->
+       <article id="numpy">
+            <h2>NumPy</h2>
+            <pre><code>
+import numpy as np
+
+# Création de tableaux
+a = np.array([1, 2])
+print(a)
+print(type(a)) # Affiche le type
+
+# Tableau homogène à 2 dimensions
+b = np.array([[1, 2], [3, 4]])
+
+# Créer un tableau rempli de 1
+ones_arr = np.ones((6, 6))
+
+# Générer une série d'espacement linéaire
+c = np.linspace(0, 15, 4)
+
+# Utilisation de np.arange()
+np.arange(10)  # de 0 à 10 exclus
+np.arange(5, 10)  # de 5 à 10 exclus
+np.arange(0, 10, 4)  # de 0 à 10 par pas de 4
+
+# Reshaper un tableau
+M = np.arange(20).reshape(5, 4)
+print(M)
+
+# Transposer un tableau
+print(M.T)
+
+# Opérations simples
+arr = np.array([3, 4, 5])
+print('mean:', arr.mean())
+print('min:', arr.min())
+print('max:', arr.max())
+print('median:', np.median(arr))
+
+# Accès aux éléments
+arr[3]       # Accéder à l'indice 3
+arr[1:3]     # Indices 1 à 3
+arr[:3]      # Jusqu'à l'indice 3
+arr[3:]      # À partir de l'indice 3
+arr[::2]     # Pas de 2
+
+# Filtrage
+arr[arr > 10]        # Affiche les éléments supérieurs à 10
+arr[3] = 12          # Modifier l'élément à l'indice 3
+arr[arr < 0] = 0     # Remplace les éléments négatifs par 0
+
+# Calcul de la somme des éléments
+n = np.sum(arr > arr.mean())
+print(n)
+            </code></pre>
+       
+        </article>
+
+        <!-- Pandas Section -->
+       <article id="pandas">
+            <h2>Pandas</h2>
+            <pre><code>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns  # Nécessaire pour créer des heatmaps (pip install seaborn)
+
+
+# Lire un fichier CSV
+df = pd.read_csv('a.csv')
+
+# Affichage des premières et dernières lignes
+print(df.head(4))  # Affiche les 4 premières lignes
+print(df.tail(4))  # Affiche les 4 dernières lignes
+
+# Infos sur les dimensions et types des colonnes
+df.shape     # Nombre de lignes et colonnes
+df.dtypes    # Types des colonnes
+df.columns   # Noms des colonnes
+
+# Accéder à une colonne
+df['Age']    # Accéder à la colonne 'Age'
+
+# Accéder à plusieurs colonnes
+df[['Age', 'Gender']]
+
+# Modifier les données
+df['Age'] = 0                # Remplacer toutes les valeurs de la colonne 'Age' par 0
+df['Age'] = df['Age'] * 2     # Multiplier la colonne 'Age' par 2
+
+# Ajouter ou supprimer des colonnes
+df['Test'] = 0                # Ajouter une nouvelle colonne 'Test'
+df.drop(columns='Test')       # Supprimer la colonne 'Test'
+
+# Renommer des colonnes
+df.rename(columns={'Age': 'Ages'})
+
+# Modifier le type de données d'une colonne
+df['Ages'].astype(float)
+
+# Trier un DataFrame
+df.sort_values('Age')                    # Trier par 'Age' croissant
+df.sort_values('Age', ascending=False)   # Trier par 'Age' décroissant
+
+# Accéder à des éléments par index (iloc)
+df.iloc[0, 3]           # Première ligne, 4ème colonne
+df.iloc[0:10, 3]        # Lignes 0 à 9, 4ème colonne
+df.iloc[0:12]           # 12 premières lignes, toutes les colonnes
+df.iloc[0:12, [2, 3]]   # Colonnes 3 et 4 des 12 premières lignes
+
+# Filtrage basé sur des conditions
+df.loc[df['Age'] > 10, :]  # Lignes où l'Age est > 10
+df.loc[(df['Age'] > 10) & (df['Gender'] == 'Female'), 'Transaction']
+
+# Modification basée sur des conditions
+df.iloc[3, 3] = 38                       # Modifier la ligne 3, colonne 3
+df.loc[df['Amount'] > 600, 'Amount'] = 2023  # Si 'Amount' > 600, remplacer par 2023
+
+# GroupBy et agrégations
+df.groupby('Product').mean()['Price']    # Calculer le prix moyen par produit
+df.groupby('Product').count()['Sales']   # Compter les ventes par produit
+df.groupby('Product').sum()['Revenue']   # Chiffre d'affaires par produit
+
+# Agrégations multiples avec groupby
+df.groupby('Product_Name').agg({
+    'Price': 'mean', 
+    'Sales': 'sum', 
+    'Revenue': 'sum'
+})# GESTION DES DATES AVEC PANDAS
+
+# Conversion d'une colonne chaîne de caractères en datetime
+df['date'] = pd.to_datetime(df['date_column'], format='%Y-%m-%d')
+
+# Extraire des informations sur les dates
+df['year'] = df['date'].dt.year          # Extraire l'année
+df['month'] = df['date'].dt.month        # Extraire le mois
+df['day'] = df['date'].dt.day            # Extraire le jour
+df['weekday'] = df['date'].dt.weekday    # Jour de la semaine (0 = Lundi, 6 = Dimanche)
+
+# Filtrage basé sur les dates
+start_date = '2023-01-01'
+end_date = '2023-12-31'
+mask = (df['date'] >= start_date) & (df['date'] <= end_date)
+df_filtered = df.loc[mask]  # Filtrer les lignes dans cet intervalle
+
+# Calculer la différence entre deux dates
+df['date_diff'] = (df['date'] - df['other_date_column']).dt.days
+
+# Resample : regrouper les données par période (mois, semaines, etc.)
+df.set_index('date', inplace=True)
+monthly_data = df.resample('M').sum()    # Somme des valeurs par mois
+
+# Créer une série de dates
+date_range = pd.date_range(start='2023-01-01', end='2023-12-31', freq='D')  # Série de dates journalières
+
+# Décalage temporel (shift)
+df['previous_day'] = df['value_column'].shift(1)  # Décaler la colonne d'un jour
+  # TABLEAU CROISÉ DYNAMIQUE (Pivot Table)
+pivot_table = pd.pivot_table(df, values='Sales', index='Product', columns='Month', aggfunc='sum')
+print(pivot_table)
+
+# Afficher un tableau croisé dynamique avec un heatmap
+plt.figure(figsize=(10,6))
+sns.heatmap(pivot_table, annot=True, fmt='.1f', cmap='coolwarm')
+plt.title('Heatmap des Ventes par Produit et Mois')
+plt.xlabel('Mois')
+plt.ylabel('Produit')
+plt.show()
+            </code></pre>
+        </article>
+
+        <!-- Matplotlib Section -->
+        <article id="matplotlib">
+            <h2>Matplotlib</h2>
+            <pre><code>
+# Installation: pip install matplotlib
+import matplotlib.pyplot as plt
+import pandas as pd
+
+data = pd.read_csv('mon.csv')
+
+# Nuage de points
+temp = data['temperature']
+hum = data['humidity']
+plt.scatter(temp, hum)
+plt.xlabel('Temperature')
+plt.ylabel('Humidité')
+plt.title('Nuage de points')
+plt.show()
+
+# Diagramme à barres
+plt.bar(temp, hum)
+plt.xlabel('Temperature')
+plt.ylabel('Humidité')
+plt.title('Diagramme à barres')
+plt.show()
+
+# Histogramme
+plt.hist(temp, bins=10, edgecolor='black')
+plt.xlabel('Temperature')
+plt.ylabel('Fréquence')
+plt.title('Histogramme')
+plt.show()
+
+# Courbe
+month = data['month']
+plt.plot(month, temp)
+plt.xlabel('Month')
+plt.ylabel('Temperature')
+plt.title('Courbes')
+plt.show()
+
+# Plusieurs graphiques dans la même fenêtre
+plt.figure()
+
+plt.subplot(221)
+plt.scatter(temp, hum)
+plt.xlabel('Temperature')
+plt.ylabel('Humidity')
+plt.title('Nuage de points')
+
+plt.subplot(222)
+plt.bar(month, hum)
+plt.xlabel('Month')
+plt.ylabel('Air Quality')
+plt.title('Diagramme à barres')
+
+plt.subplot(223)
+plt.hist(temp, bins=10, edgecolor='black')
+plt.xlabel('Temperature')
+plt.ylabel('Frequency')
+plt.title('Histogramme')
+
+plt.subplot(224)
+plt.plot(month, temp)
+plt.xlabel('Month')
+plt.ylabel('Temperature')
+plt.title('Courbes')
+
+plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.5, wspace=0.5)
+plt.show()
+            </code></pre>
+        </article>
+    </section>
+
+    <footer>
+        <p>Documentation Python NumPy, Pandas et Matplotlib - Créé rapidement pour rappel rapide.</p>
+    </footer>
+</body>
+</html>
