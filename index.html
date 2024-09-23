@@ -263,6 +263,55 @@ plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.5, ws
 plt.show()
             </code></pre>
         </article>
+		
+		<!-- Plotly Section -->
+<article id="plotly">
+    <h2>Plotly</h2>
+    <pre><code>
+# Installation: pip install plotly
+import plotly.graph_objects as go
+import pandas as pd
+
+# Exemple 1 : Tracé de base d'une courbe
+x = [1, 2, 3, 4, 5]
+y = [10, 11, 12, 13, 14]
+fig = go.Figure(data=go.Scatter(x=x, y=y, mode='lines+markers'))
+fig.update_layout(title='Exemple de Courbe avec Plotly', xaxis_title='X', yaxis_title='Y')
+fig.show()
+
+# Exemple 2 : Diagramme à barres
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
+sales = [100, 200, 300, 400, 500]
+fig = go.Figure(data=[go.Bar(x=months, y=sales)])
+fig.update_layout(title='Ventes par Mois', xaxis_title='Mois', yaxis_title='Ventes')
+fig.show()
+
+# Exemple 3 : Heatmap
+import numpy as np
+z = np.random.rand(10, 10)
+fig = go.Figure(data=go.Heatmap(z=z))
+fig.update_layout(title='Exemple de Heatmap')
+fig.show()
+
+# Exemple 4 : Nuage de points interactif
+df = pd.DataFrame({
+    'X': np.random.rand(50),
+    'Y': np.random.rand(50),
+    'Size': np.random.rand(50) * 100,
+    'Color': np.random.rand(50)
+})
+fig = go.Figure(data=go.Scatter(
+    x=df['X'], y=df['Y'], mode='markers',
+    marker=dict(size=df['Size'], color=df['Color'], showscale=True)
+))
+fig.update_layout(title='Nuage de Points Interactif')
+fig.show()
+
+    </code></pre>
+</article>
+
+		
+		
     </section>
 
     <footer>
